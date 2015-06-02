@@ -239,18 +239,19 @@ def parse_flags(build_log):
     temp_output = re.compile("-S|-E|-x assembler|-o ([a-zA-Z0-9._].tmp)|(/dev/null)")
 
     # Flags we want:
+    # -search path (-B)
     # -includes (-i, -I)
     # -defines (-D)
     # -warnings (-Werror), but no assembler, etc. flags (-Wa,-option)
     # -language (-std=gnu99) and standard library (-nostdlib)
     # -word size (-m64)
-    flags_whitelist = ["-[iID].*", "-W[^,]*", "-std=[a-z0-9+]+", "-(no)?std(lib|inc)", "-m[0-9]+"]
+    flags_whitelist = ["-B.*", "-[iID].*", "-W[^,]*", "-std=[a-z0-9+]+", "-(no)?std(lib|inc)", "-m[0-9]+"]
     flags_whitelist = re.compile("|".join(map("^{}$".format, flags_whitelist)))
     flags = set()
     line_count = 0
 
     # Used to only bundle filenames with applicable arguments
-    filename_flags = ["-o", "-I", "-isystem", "-include"]
+    filename_flags = ["-o", "-B", "-I", "-isystem", "-include"]
 
     # Process build log
     for line in build_log:
