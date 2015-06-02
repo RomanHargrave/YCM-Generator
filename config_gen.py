@@ -255,8 +255,10 @@ def parse_flags(build_log):
 
     # Process build log
     for line in build_log:
-        if(temp_output.search(line)):
-            continue
+        # This ignores every single command in a reasonably complicated CMake build (since it will likely build each unit as a module and then link them all)
+        # I would rather have unneeded flags than no flags at all
+        # if(temp_output.search(line)):
+        #     continue
 
         line_count += 1
         words = split_flags(line)
